@@ -65,7 +65,7 @@ bot.on(message("text"), async (ctx) => {
           );
         } else {
           ctx.reply(
-            `Could not find a node running at ${userInput}. Please try installing again.`
+            `Could not find a node running at ${userInput}. Please check the IP, or try installing again.`
           );
         }
       })
