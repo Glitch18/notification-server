@@ -52,22 +52,18 @@ apiRouter.post("/send-message", async (req, res) => {
   const chatID = db.get(
     "SELECT chatID FROM users WHERE token = ?",
     [req.body.token],
-    (err: any, row: any) => {
+    async (err: any, row: any) => {
       if (err) {
         console.log(err);
-        return null;
+        res.status(500).send("Internal server error");
+        return;
       } else {
-        return row.chatID;
+        await sendMessage(row.chatID, req.body.message);
+        res.status(200).send("Message sent");
+        return;
       }
     }
   );
-
-  if (!chatID) {
-    console.log(`ChatID not found for ${req.body.token}`);
-    return;
-  }
-
-  await sendMessage(chatID, req.body.message);
 });
 
 export async function stopNotifications(chatID: string): Promise<void> {
