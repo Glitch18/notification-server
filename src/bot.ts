@@ -16,7 +16,7 @@ bot.start((ctx) =>
   ctx.reply("Welcome! Please use /subscribe to start receiving notifications.")
 );
 bot.help((ctx) =>
-  ctx.reply(`To start receiving notifications for your Validator, please use /subscribe
+  ctx.reply(`To start receiving notifications for your Validator, please use /subscribe\n\
   To stop receiving notifications, please use /unsubscribe`)
 );
 // A Map to hold state about who is currently subscribing
@@ -76,10 +76,8 @@ bot.on(message("text"), async (ctx) => {
     // Mark the user as no longer subscribing
     subscribingUsers.delete(chatId);
   } else {
-    ctx.reply(
-      `To start receiving notifications for your Validator, please use /subscribe
-      To stop receiving notifications, please use /unsubscribe`
-    );
+    ctx.reply(`To start receiving notifications for your Validator, please use /subscribe\n\
+    To stop receiving notifications, please use /unsubscribe`);
   }
 });
 
