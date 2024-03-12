@@ -9,8 +9,14 @@ app.use(express.json());
 bot.launch(); // Start the bot
 
 // Enable graceful stop
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+process.once("SIGINT", () => {
+  bot.stop("SIGINT");
+  process.kill(process.pid, "SIGINT");
+});
+process.once("SIGTERM", () => {
+  bot.stop("SIGTERM");
+  process.kill(process.pid, "SIGTERM");
+});
 
 getApiRouter().then((apiRouter) => {
   app.use("/api", apiRouter);
