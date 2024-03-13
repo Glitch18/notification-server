@@ -3,7 +3,7 @@ import { getApiRouter } from "./api";
 import { bot } from "./bot";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.use(express.json());
 
 bot.launch(); // Start the bot
