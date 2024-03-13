@@ -67,17 +67,31 @@ apiRouter.post("/send-message", async (req, res) => {
     "SELECT chatID FROM users WHERE token = ?",
     [req.body.token],
     async (err: any, row: any) => {
+      // Check if the token exists in the database
       if (err) {
         console.log(err);
         res.status(500).send("Internal server error");
         return;
+      } else if (!row) {
+        res.status(404).send("Token not found");
+        return;
       } else {
+        // Check if the chatID exists
+        if (!row.chatID) {
+          res
+            .status(404)
+            .send("ChatID not found. User may not have subscribed yet.");
+          return;
+        }
         await sendMessage(row.chatID, req.body.message);
         res.status(200).send("Message sent");
         return;
       }
     }
   );
+
+  // EDGE CASES
+  // Given token does not exist in database -> Return 404
 });
 
 export async function stopNotifications(chatID: string): Promise<void> {
