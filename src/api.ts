@@ -31,19 +31,33 @@ apiRouter.post("/save-validator", async (req, res) => {
   try {
     const data = req.body;
     const username = `${data.ip}:${data.port}`;
+
+    // Verify that the IP:Port is of valid format
+    if (!/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}$/.test(username)) {
+      res.status(400).send("Invalid IP:Port format");
+      return;
+    }
+
     const uniqueToken = uuidv4();
 
-    // Assuming you have an asynchronous version of `db.run`, e.g., using `util.promisify` or a wrapper library
     await dbRunAsync("INSERT INTO users (username, token) VALUES (?, ?)", [
       username,
       uniqueToken,
     ]);
 
     res.send({ token: uniqueToken });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal server error");
+  } catch (err: any) {
+    if (err.code === "SQLITE_CONSTRAINT") {
+      res.status(409).send("This IP:Port is already registered.");
+    } else {
+      console.error(err);
+      res.status(500).send("Internal server error");
+    }
   }
+
+  // EDGE CASES
+  // IP:Port already in database -> Return as is
+  // IP:Port should be of valid format
 });
 
 apiRouter.post("/send-message", async (req, res) => {
