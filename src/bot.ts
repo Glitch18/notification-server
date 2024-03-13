@@ -16,8 +16,9 @@ bot.start((ctx) =>
   ctx.reply("Welcome! Please use /subscribe to start receiving notifications.")
 );
 bot.help((ctx) =>
-  ctx.reply(`To start receiving notifications for your Validator, please use /subscribe\n\
-  To stop receiving notifications, please use /unsubscribe`)
+  ctx.reply(
+    `To start receiving notifications for your Validator, please use /subscribe\nTo stop the notifications, please use /unsubscribe`
+  )
 );
 // A Map to hold state about who is currently subscribing
 const subscribingUsers = new Map();
@@ -61,11 +62,11 @@ bot.on(message("text"), async (ctx) => {
       .then((result) => {
         if (result) {
           ctx.reply(
-            `Found your node running at ${userInput}. You are now subscribed to validator notifications`
+            `Found your node at ${userInput}. You are now subscribed to validator notifications`
           );
         } else {
           ctx.reply(
-            `Could not find a node running at ${userInput}. Please check the IP, or try installing again.`
+            `Could not find a node at ${userInput}. Please check the IP, or try installing again.`
           );
         }
       })
@@ -76,8 +77,9 @@ bot.on(message("text"), async (ctx) => {
     // Mark the user as no longer subscribing
     subscribingUsers.delete(chatId);
   } else {
-    ctx.reply(`To start receiving notifications for your Validator, please use /subscribe\n\
-    To stop receiving notifications, please use /unsubscribe`);
+    ctx.reply(
+      `To start receiving notifications for your Validator, please use /subscribe\nTo stop the notifications, please use /unsubscribe`
+    );
   }
 });
 
